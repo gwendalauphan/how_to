@@ -30,7 +30,7 @@ vagrant provision vm2 --provision-with install_docker
 vagrant global-status
 virsh --connect qemu:///system list --all
 
-vagrant reload vm1 --provider=libvirt
+vagrant reload vm1
 
 
 vagrant halt      # Stop the VM

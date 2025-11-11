@@ -172,6 +172,8 @@ flowchart TB
 Run the command below to check if your CPU supports virtualization:
 ```bash
 grep -E --color 'vmx|svm' /proc/cpuinfo
+# Or docker installed
+docker --version
 ```
 
 ### Installation
@@ -208,7 +210,7 @@ minikube kubectl -- cluster-info
 
 As you can see, minikube provides a built-in way to run kubectl commands using `minikube kubectl -- <command>`. But normally, you'll have to install kubectl separately to interact with the cluster.
 
-This is what we'll see in the next section.
+This is what we'll see in the next section -> [How to install kubectl (kubernetes client tool)](#how-to-install-kubectl-kubernetes-client-tool)
 
 ### Good to know
 Minikube also provides a usefull web dashboard to monitor your cluster. You can access it by running:
@@ -253,9 +255,89 @@ minikube delete -p cluster2
 minikube delete --all
 ```
 
+---
+
 ## How to install kubectl (kubernetes client tool)
 
+The second main part of kubernetes is the application deployment. After setting up our cluster, we need a way to interact with it. For that, we use **kubectl**, the kubernetes command-line tool.
+
+Comparativly to the admin part, there is only one main kubectl tool for developers to deploy their applications on the cluster. It exists also other tools that wrap kubectl like **kustomize** or **helm** (we'll see helm later in that tutorial).
+
+### Installation
+
+You can find the official installation instructions here: https://kubernetes.io/docs/tasks/tools/
+
+If you want to upgrade kubectl, follow the same instructions as above to download the latest version and replace the existing binary by this command:
+```bash
+mv ./kubectl ~/.local/bin/kubectl
+```
+
+Set autocomplete for kubectl (optional):
+```bash
+source <(kubectl completion bash)  # for bash users
+# Save it to your bashrc/zshrc to load it automatically on terminal start
+echo 'source <(kubectl completion bash)' >> ~/.bashrc
+```
+
+Create your first alias for kubectl (optional):
+```bash
+echo "alias k='kubectl'" >> ~/.bashrc
+echo 'complete -o default -F __start_kubectl k' >> ~/.bashrc
+```
+
+### First kubectl commands
+
+Now you can start using kubectl to interact with your minikube cluster.
+Here are some basic commands to get you started:
+```bash
+# Check kubectl version
+kubectl version --client
+
+# Get cluster info
+kubectl cluster-info
+
+# List all nodes in the cluster
+kubectl get nodes
+
+# List all pods in all namespaces
+kubectl get pods -A
+```
+
+Actually you will see all the system pods running in the `kube-system` namespace. These pods are managed by kubernetes to ensure the proper functioning of the cluster. You can retrieve these informations on the dashboard as well.
+
+### Addons
+Minikube comes with several built-in addons that you can enable to add extra functionalities to your cluster. For example, you can enable the **ingress** and **metrics-server** addons to manage ingress resources and monitor your cluster metrics.
+
+to enable these addons, run the following commands:
+```bash
+minikube addons enable ingress
+minikube addons enable metrics-server
+```
+
+To verify that the ingress controller is running, you can check the status of the pods in the `ingress-nginx` namespace:
+
+```bash
+kubectl -n ingress-nginx wait --for=condition=ready pod -l app.kubernetes.io/component=controller --timeout=180s
+```
+
+View the Pod and Service you created by installing these addons:
+```bash
+kubectl get pod,svc -n ingress-nginx
+kubectl get pod,svc -n kube-system
+```
+
+You can see now the metrics of the nodes and pods in your cluster by running:
+```bash
+kubectl top nodes
+kubectl top pods -A
+```
+
+### Lets deploy our first application!
+
+.
+.
 
 
+### Good to know
 
 
