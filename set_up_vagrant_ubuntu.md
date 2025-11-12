@@ -112,6 +112,12 @@ Verify installation:
 vagrant --version
 ```
 
+Set up auto-completion for bash (optional):
+
+```bash
+vagrant autocomplete install --bash
+```
+
 ---
 
 ### 1.4 Install the libvirt provider plugin

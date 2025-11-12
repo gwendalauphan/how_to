@@ -293,7 +293,8 @@ sudo firewall-cmd --reload
 Even if SSH passwords are disabled, bots still try connecting. Fail2Ban blocks IPs after repeated failed attempts.
 
 ```bash
-sudo dnf install fail2ban
+sudo dnf install epel-release -y
+sudo dnf install fail2ban -y
 sudo systemctl enable --now fail2ban
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 ```
@@ -303,16 +304,14 @@ In `/etc/fail2ban/jail.local`:
 ```
 [sshd]
 enabled = true
-maxretry = 5
-bantime = 10m
-findtime = 10m
+port = 50022
 ```
 
 Restart:
-
 ```bash
 sudo systemctl restart fail2ban
 ```
+
 ---
 
 ## 3. Disable Unused Services
