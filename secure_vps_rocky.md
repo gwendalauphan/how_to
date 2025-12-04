@@ -185,7 +185,7 @@ sudo vi /etc/ssh/sshd_config
 
 2. Find and set the following:
 
-```
+```bash
 PasswordAuthentication no
 ```
 
